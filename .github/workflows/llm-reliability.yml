@@ -27,6 +27,12 @@ jobs:
           --health-timeout 5s
           --health-retries 10
 
+    env:
+      EVALUATOR_PROVIDER: ollama
+      OLLAMA_HOST: http://localhost:11434
+      EVALUATOR_MODEL_ID: qwen2.5:3b
+      ES_HOST: http://localhost:9200
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,21 +52,27 @@ jobs:
       - name: Install dependencies
         run: pip install -e .
 
+      - name: Create ES index with mapping
+        run: |
+          curl -s -X PUT http://localhost:9200/trusted_docs -H 'Content-Type: application/json' -d '{
+            "mappings": {
+              "properties": {
+                "content": {"type": "text"},
+                "embedding": {
+                  "type": "dense_vector",
+                  "dims": 256,
+                  "index": true,
+                  "similarity": "cosine"
+                }
+              }
+            }
+          }'
+
       - name: Ingest documents into Elasticsearch
-        run: python -c "from src.ingest.pipeline import run_ingest; run_ingest('.llm-reliability.yaml')"
-        env:
-          EVALUATOR_PROVIDER: ollama
-          OLLAMA_HOST: http://localhost:11434
-          EVALUATOR_MODEL_ID: qwen2.5:3b
-          ES_HOST: http://localhost:9200
+        run: python -c "from src.ingest.pipeline import run_ingest; result = run_ingest('.llm-reliability.yaml'); print(f'Ingested {result[\"chunks_indexed\"]} chunks from {result[\"documents_processed\"]} docs')"
 
       - name: Start API server
         run: uvicorn src.api:app --host 0.0.0.0 --port 8000 &
-        env:
-          EVALUATOR_PROVIDER: ollama
-          OLLAMA_HOST: http://localhost:11434
-          EVALUATOR_MODEL_ID: qwen2.5:3b
-          ES_HOST: http://localhost:9200
 
       - name: Wait for server startup
         run: |
