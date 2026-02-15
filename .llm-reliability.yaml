@@ -1,0 +1,17 @@
+use_case: "customer support chatbot for Acme Corp"
+risk_tolerance:
+  deploy_threshold: 0.10
+  warn_threshold: 0.25
+  reject_threshold: 0.30
+evaluation:
+  num_prompts: 5
+  prompt_categories: [factual_recall, edge_cases]
+doc_sources:
+  - type: local
+    path: ./docs/policies/
+model:
+  provider: ollama
+  model_id: "qwen2.5:3b"
+elasticsearch:
+  host: "http://localhost:9200"
+  index: "trusted_docs"

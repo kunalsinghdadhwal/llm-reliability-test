@@ -1,0 +1,3 @@
+Acme Corp Product Warranty
+
+All Acme Corp electronics carry a 2-year limited warranty from the date of purchase. The warranty covers manufacturing defects and hardware failures under normal use. Accidental damage, water damage, and unauthorized modifications void the warranty. Warranty claims require proof of purchase. Replacement products are covered for the remainder of the original warranty period.

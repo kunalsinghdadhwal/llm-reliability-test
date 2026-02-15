@@ -1,0 +1,17 @@
+use_case: "integration test"
+risk_tolerance:
+  deploy_threshold: 0.10
+  warn_threshold: 0.30
+  reject_threshold: 0.30
+evaluation:
+  num_prompts: 5
+  prompt_categories: [factual_recall]
+doc_sources:
+  - type: local
+    path: tests/fixtures/trusted_docs/
+model:
+  provider: ollama
+  model_id: "llama3.2"
+elasticsearch:
+  host: "http://localhost:9200"
+  index: "test_trusted_docs"

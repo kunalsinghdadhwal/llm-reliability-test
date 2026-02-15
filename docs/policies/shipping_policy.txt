@@ -1,0 +1,9 @@
+Acme Corp Shipping Policy
+
+Standard shipping is free for all orders over $50 within the continental United States. Orders under $50 incur a flat $5.99 shipping fee.
+
+Express shipping (2-3 business days) is available for $12.99. Overnight shipping is available for $24.99.
+
+International shipping is available to select countries. Rates are calculated at checkout based on destination and package weight. Customs duties and taxes are the responsibility of the recipient.
+
+All orders are processed within 1-2 business days. Tracking information is provided via email once the order ships.
