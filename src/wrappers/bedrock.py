@@ -64,8 +64,12 @@ def embed(text: str) -> list[float]:
     """
     if os.environ.get("EVALUATOR_PROVIDER") == "ollama":
         # Hash-based fake embedding (256 dims) for Ollama-only mode
-        h = hashlib.sha256(text.encode("utf-8")).hexdigest()
-        return [int(h[i : i + 2], 16) / 255.0 for i in range(0, 512, 2)]
+        # Chain multiple hashes to get enough bytes for 256 dimensions
+        vectors = []
+        for seed in range(8):
+            h = hashlib.sha256(f"{seed}:{text}".encode("utf-8")).hexdigest()
+            vectors.extend(int(h[i : i + 2], 16) / 255.0 for i in range(0, 64, 2))
+        return vectors[:256]
 
     client = _get_bedrock_client()
     model_id = os.environ.get("BEDROCK_EMBEDDING_MODEL_ID", "amazon.titan-embed-text-v2:0")
