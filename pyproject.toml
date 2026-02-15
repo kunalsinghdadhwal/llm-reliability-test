@@ -11,7 +11,7 @@ dependencies = [
     "uvicorn",
     "pydantic",
     "boto3",
-    "elasticsearch",
+    "elasticsearch>=8,<9",
     "pyyaml",
     "ollama",
     "scalar-fastapi",
